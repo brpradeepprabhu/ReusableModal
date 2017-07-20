@@ -1,25 +1,33 @@
-import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
+
+import { AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { ModalService, ModalMessage } from '../modal.service';
-import { DialogModule } from 'primeng/primeng';
+
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements AfterContentChecked {
   headerContent = 'default';
+  @Input() message;
+  @Input() uid;
+
+  @Output() closeEvent = new EventEmitter<any>();
   display = false;
   @ViewChild('modalContent', { read: ViewContainerRef }) _vcr;
   constructor(private modalSer: ModalService, private containerRef: ViewContainerRef) {
-    this.modalSer.modalObservable.subscribe(function (message: ModalMessage) {
-      this.headerContent = message.header;
-      this._vcr.clear();
-      this._vcr.createEmbeddedView(message.template);
-      this.display = true;
-    }.bind(this));
+
   }
 
-  ngOnInit() {
+  ngAfterContentChecked() {
+    if (this.message !== undefined) {
+      this.headerContent = this.message.header;
+
+    }
+  }
+  closeBtn() {
+    console.log("uid", this.uid)
+    this.closeEvent.emit(this.uid);
   }
 
 }

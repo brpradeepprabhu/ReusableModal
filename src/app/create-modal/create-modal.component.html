@@ -3,5 +3,9 @@
   <button (click)="btnClick()">Create Modal</button>
   <ng-template #modalContent>
     <div (click)="modalClick()">{{modelContentText}}</div>
+    <input type="text" [(ngModel)]="value">
+  </ng-template>
+  <ng-template #modalContent1>
+    <div (click)="modalClick()">second static template</div>
   </ng-template>
 </p>

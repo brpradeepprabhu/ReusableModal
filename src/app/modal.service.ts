@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/observable';
 export interface ModalMessage {
   header: string;
   template: any;
+  $$uid?: any;
 }
 @Injectable()
 export class ModalService {
@@ -14,4 +15,5 @@ export class ModalService {
   showModal(message: ModalMessage) {
     this.ModalSubject.next(message);
   }
+
 }

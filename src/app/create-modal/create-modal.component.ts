@@ -8,9 +8,11 @@ import { ModalMessage, ModalService } from '../modal.service';
 })
 export class CreateModalComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
+  @ViewChild('modalContent1') modalContent2: TemplateRef<any>;
   containerConent = '';
   modelContentText = 'Passing data to content';
   constructor(private modalSer: ModalService) { }
+  value = '1';
   btnClick() {
     this.modalSer.showModal({
       header: 'From Btn Click',
@@ -22,9 +24,12 @@ export class CreateModalComponent implements OnInit {
 
   modalClick() {
     this.containerConent = 'update modal';
-    setTimeout(function () {
-      this.modelContentText = "updated after timeout";
-    }.bind(this), 1000);
+    this.modelContentText = 'createModal';
+    this.modalSer.showModal({
+      header: 'From second Click',
+      template: this.modalContent2
+    });
+    this.containerConent = 'initModal';
   }
   ngOnInit() {
   }

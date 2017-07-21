@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ModalMessage, ModalService } from '../modal.service';
 @Component({
   selector: 'app-test-modal',
-  templateUrl: '<div>test component</div>',
+  template: `<div>test component</div>`,
   styleUrls: ['./create-modal.component.css']
 })
 export class TestComponent implements OnInit {

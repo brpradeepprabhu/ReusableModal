@@ -35,12 +35,12 @@ export class ModalService {
     const templateContentView = message.template.createEmbeddedView();
     this._applicationRef.attachView(templateContentView);
     let modalCompRef: ComponentRef<ModalComponent>;
-    console.log("came", message.template instanceof TemplateRef)
+    console.log('came', message.template instanceof TemplateRef)
     if (message.template instanceof TemplateRef) {
       modalCompRef = this.modalComponent.create(this._injector, [templateContentView.rootNodes]);
     } else {
-      let componetRef = this.componentFactoryResolver.resolveComponentFactory(message.template);
-      console.log(componentRef)
+      let componetRefTest = this.componentFactoryResolver.resolveComponentFactory(message.template);
+      console.log(componetRefTest)
     }
     this._applicationRef.attachView(modalCompRef.hostView);
     modalCompRef.instance.bindDialogConfig(message.config);
@@ -56,7 +56,7 @@ export class ModalService {
       if (this.modalStack[i].instance.$$uuid === modalRef.$$uuid) {
         this.modalStack[i].destroy();
         this.modalStack.splice(i, 1);
-        console.log("destory", i, this.modalStack.length, modalRef.$$uuid);
+        console.log('destory', i, this.modalStack.length, modalRef.$$uuid);
         break;
       }
     }

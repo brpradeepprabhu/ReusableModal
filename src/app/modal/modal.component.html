@@ -1,5 +1,3 @@
-<div>{{headerContent}}
-</div>
-<div #modalContent>
-</div>
-<button (click)="closeBtn()">close</button>
+<p-dialog [(visible)]="display" (onShow)="showEvent($event)" (onHide)="hideEvent($event)">
+  <ng-content></ng-content>
+</p-dialog>

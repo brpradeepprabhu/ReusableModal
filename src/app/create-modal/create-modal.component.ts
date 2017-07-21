@@ -9,27 +9,33 @@ import { ModalMessage, ModalService } from '../modal.service';
 export class CreateModalComponent implements OnInit {
   @ViewChild('modalContent') modalContent: TemplateRef<any>;
   @ViewChild('modalContent1') modalContent2: TemplateRef<any>;
-  containerConent = '';
+
   modelContentText = 'Passing data to content';
   constructor(private modalSer: ModalService) { }
   value = '1';
+  dialogRef;
   btnClick() {
-    this.modalSer.showModal({
-      header: 'From Btn Click',
+    this.dialogRef = this.modalSer.createModal({
+      config: { header: 'From Btn Click', modal: true },
       template: this.modalContent
     });
-    this.containerConent = 'initModal';
+    this.dialogRef.onShow.then(function (e) {
+      console.log('dialog is showing');
+    });
+    this.dialogRef.onHide.then(function (e) {
+      console.log('dialog is hiding');
+    });
 
   }
-
+  closeClick() {
+    this.modalSer.close(this.dialogRef);
+  }
   modalClick() {
-    this.containerConent = 'update modal';
     this.modelContentText = 'createModal';
-    this.modalSer.showModal({
-      header: 'From second Click',
+    this.modalSer.createModal({
+      config: { header: 'From second Click' },
       template: this.modalContent2
     });
-    this.containerConent = 'initModal';
   }
   ngOnInit() {
   }

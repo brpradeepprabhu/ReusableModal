@@ -1,11 +1,14 @@
 <p>
-  create-modal works! {{containerConent}}
+  create-modal works!
   <button (click)="btnClick()">Create Modal</button>
+
   <ng-template #modalContent>
-    <div (click)="modalClick()">{{modelContentText}}</div>
-    <input type="text" [(ngModel)]="value">
+    Header Content To be displayed
+    <button (click)="modalClick()">show second</button>
+    <button (click)="closeClick()">close</button>
   </ng-template>
+
   <ng-template #modalContent1>
-    <div (click)="modalClick()">second static template</div>
+    <div>second static template</div>
   </ng-template>
 </p>

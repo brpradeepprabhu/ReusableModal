@@ -1,13 +1,24 @@
 import { Observable } from 'rxjs/Rx';
 import { Dialog } from 'primeng/primeng';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ApplicationRef,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactory,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
+import { ModalDirective } from "../modal.directive";
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements OnInit, AfterViewInit {
   display: boolean;
   $$uuid: number;
   serviceRef: any;
@@ -17,8 +28,13 @@ export class ModalComponent implements OnInit {
   private _reject: (showEvent?: any) => void;
   private _resolveClose: (showEvent?: any) => void;
   private _rejectClose: (showEvent?: any) => void;
+
   @ViewChild(Dialog) dialogInstance;
-  constructor() {
+  @ViewChild(ModalDirective) mdlDir: ModalDirective;
+  public componentHolder: ComponentFactory<any>;
+
+  constructor(private _applicationRef: ApplicationRef, private cdr: ChangeDetectorRef) {
+
     this.onShow = new Promise((resolve, reject) => {
       this._resolve = resolve;
       this._reject = reject;
@@ -28,7 +44,14 @@ export class ModalComponent implements OnInit {
       this._rejectClose = reject;
     });
   }
-
+  ngAfterViewInit() {
+    if (this.componentHolder) {
+      this.mdlDir.viewContainerRef.createComponent(this.componentHolder);
+      console.log(this._applicationRef)
+      this.cdr.detectChanges();
+      // this._applicationRef.attachView(this.componentHolder.);
+    }
+  }
   ngOnInit() {
     this.display = true;
   }

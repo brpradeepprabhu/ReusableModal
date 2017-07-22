@@ -1,12 +1,36 @@
+import { NgModel } from '@angular/forms/src/directives';
+
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ModalMessage, ModalService } from '../modal.service';
+
 @Component({
   selector: 'app-test-modal',
-  template: `<div>test component</div>`,
+  template: `<div>test component
+  <input type="text" [(ngModel)]="value">
+  <button (click)="btnClick1()">Create Modal</button><ng-template #modalContent1>
+    <div>second static template</div>
+  </ng-template></div>`,
   styleUrls: ['./create-modal.component.css']
 })
 export class TestComponent implements OnInit {
+  value = 'pradeep';
+  dialogRef;
+  @ViewChild('modalContent1') modalContent: TemplateRef<any>;
   ngOnInit() {
+  }
+  constructor(private modalSer: ModalService) { }
+  btnClick1() {
+    this.dialogRef = this.modalSer.createModal({
+      config: { header: 'From Template', modal: true },
+      template: this.modalContent
+    });
+    this.dialogRef.onShow.then(function (e) {
+      console.log('dialog is showing');
+    });
+    this.dialogRef.onHide.then(function (e) {
+      console.log('dialog is hiding');
+    });
+
   }
 }
 @Component({
@@ -25,7 +49,7 @@ export class CreateModalComponent implements OnInit {
   btnClick() {
     this.dialogRef = this.modalSer.createModal({
       config: { header: 'From Btn Click', modal: true },
-      template: this.modalContent
+      template: TestComponent
     });
     this.dialogRef.onShow.then(function (e) {
       console.log('dialog is showing');

@@ -9,6 +9,7 @@ import {
   Injector,
   TemplateRef,
   ViewContainerRef,
+  ReflectiveInjector,
 } from '@angular/core';
 
 import { ModalComponent } from '../app/modal/modal.component';
@@ -30,20 +31,22 @@ export class ModalService {
   createModal(message: ModalMessage) {
 
     this.modalComponent = this.componentFactoryResolver.resolveComponentFactory(ModalComponent);
-
-
-    const templateContentView = message.template.createEmbeddedView();
-    this._applicationRef.attachView(templateContentView);
     let modalCompRef: ComponentRef<ModalComponent>;
-    console.log('came', message.template instanceof TemplateRef)
+    this._injector = ReflectiveInjector.resolveAndCreate([{ provide: '_applicationRef', useValue: this._applicationRef }]);
+    console.log('came', message.template instanceof TemplateRef);
     if (message.template instanceof TemplateRef) {
+      const context = {};
+      const templateContentView = message.template.createEmbeddedView(context);
+      this._applicationRef.attachView(templateContentView);
       modalCompRef = this.modalComponent.create(this._injector, [templateContentView.rootNodes]);
     } else {
       let componetRefTest = this.componentFactoryResolver.resolveComponentFactory(message.template);
-      console.log(componetRefTest)
+      modalCompRef = this.modalComponent.create(this._injector);
+      modalCompRef.instance.componentHolder = componetRefTest;
+
     }
-    this._applicationRef.attachView(modalCompRef.hostView);
     modalCompRef.instance.bindDialogConfig(message.config);
+    this._applicationRef.attachView(modalCompRef.hostView);
     modalCompRef.instance.$$uuid = this.modalCounter;
     this.modalCounter++;
     modalCompRef.instance.serviceRef = this;
